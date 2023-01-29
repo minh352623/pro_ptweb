@@ -1,16 +1,19 @@
 const express = require("express");
 const cors = require("cors");
-const contactsRouter = require("./app/routes/contact.route");
 const ApiError = require("./app/api-error");
-
+const authRoute = require("./app/routes/auth.route");
+const userRoute = require("./app/routes/user.route");
 const app = express();
-
+const bodyParser = require("body-parser");
 app.use(cors());
-app.use(express.json());
-app.get("/", (req, res) => {
-  res.json({ message: "Welcom to contact book application." });
-});
-app.use("/api/contacts", contactsRouter);
+// app.use(express.json());
+app.use(bodyParser.urlencoded({ extended: false }));
+
+// parse application/json
+app.use(bodyParser.json());
+app.use("/api/auth", authRoute);
+app.use("/api/auth/user", userRoute);
+
 app.use((req, res, next) => {
   // Code ở đây sẽ chạy khi không có route được định nghĩa nào
   // khớp với yêu cầu. Gọi next() để chuyển sang middleware xử lý lỗi
