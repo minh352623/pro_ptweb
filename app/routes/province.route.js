@@ -1,30 +1,23 @@
 const express = require("express");
 const {
   getPaganition,
-  createUser,
-  deleteAccount,
+  createProvince,
+  deleteProvince,
   getOne,
-  updateAccount,
-} = require("../controllers/user.controller");
+  updateProvince,
+  getAll,
+} = require("../controllers/province.controller");
+
 const { isAdmin, isAuthentication } = require("../middleware/AuthMiddleware");
 const { upload } = require("../utils/uploads");
 
 const router = express.Router();
 router.get("/pagination", [isAuthentication, isAdmin], getPaganition);
-router.post(
-  "/create",
-  upload.single("avatar"),
-  [isAuthentication, isAdmin],
-  createUser
-);
+router.post("/create", [isAuthentication, isAdmin], createProvince);
 router.get("/detail/:id", [isAuthentication, isAdmin], getOne);
+router.get("/getAll", [isAuthentication], getAll);
 
-router.delete("/:id", [isAuthentication, isAdmin], deleteAccount);
-router.patch(
-  "/update/:id",
-  upload.single("avatar"),
-  [isAuthentication, isAdmin],
-  updateAccount
-);
+router.delete("/:id", [isAuthentication, isAdmin], deleteProvince);
+router.patch("/update/:id", [isAuthentication, isAdmin], updateProvince);
 
 module.exports = router;
