@@ -3,16 +3,24 @@ const cors = require("cors");
 const ApiError = require("./app/api-error");
 const authRoute = require("./app/routes/auth.route");
 const userRoute = require("./app/routes/user.route");
+const provinceRoute = require("./app/routes/province.route");
+const hotelRoute = require("./app/routes/hotel.route");
 const app = express();
 const bodyParser = require("body-parser");
+const path = require("path");
+
 app.use(cors());
 // app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
 // parse application/json
 app.use(bodyParser.json());
+app.use("/", express.static(path.join(__dirname, "/app/uploads")));
+
 app.use("/api/auth", authRoute);
 app.use("/api/auth/user", userRoute);
+app.use("/api/auth/province", provinceRoute);
+app.use("/api/auth/hotel", hotelRoute);
 
 app.use((req, res, next) => {
   // Code ở đây sẽ chạy khi không có route được định nghĩa nào

@@ -14,7 +14,8 @@ const register = async (req, res) => {
       lastName: lastName,
       email: email,
       password: hash,
-      role: "regular",
+      role: "client",
+      avatar: "bear.png",
     });
     await newUser.save();
 
