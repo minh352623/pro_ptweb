@@ -1,7 +1,7 @@
 import createApiClient from "./api.service";
 import "../services/common.js";
-class UserService {
-  constructor(baseUrl = "http://localhost:3000/api/auth/user") {
+class ProvinceService {
+  constructor(baseUrl = "http://localhost:3000/api/auth/province") {
     this.api = createApiClient(baseUrl);
   }
 
@@ -12,29 +12,26 @@ class UserService {
     return await this.api({
       method: "POST",
       url: "/create",
-      headers: {
-        "Content-Type": "multipart/form-data",
-      },
       data: data,
     });
   }
-  async deleteAccount(id) {
+  async deleteProvince(id) {
     return await this.api.delete(`/${id}`);
   }
   async findOne(id) {
     return await this.api.get(`/detail/${id}`);
   }
 
-  async upadteUser(data, id) {
+  async upadteProvince(data, id) {
     return await this.api({
       method: "PATCH",
       url: `/update/${id}`,
-      headers: {
-        "Content-Type": "multipart/form-data",
-      },
       data: data,
     });
   }
+  async getAll() {
+    return await this.api.get(`/getAll`);
+  }
 }
 
-export default new UserService();
+export default new ProvinceService();

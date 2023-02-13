@@ -22,7 +22,7 @@
                 name="firstName"
                 autocomplete="off"
                 placeholder="First Name *"
-                class="px-3 py-3 text-white"
+                class="border px-3 py-3 text-white"
               />
               <ErrorMessage name="firstName" class="text-red-500" />
             </div>
@@ -30,7 +30,7 @@
             <div class="field-wrap">
               <Field
                 v-model="dataRegister.lastName"
-                class="px-3 py-3 text-white"
+                class="border px-3 py-3 text-white"
                 placeholder="Last Name *"
                 name="lastName"
                 type="text"
@@ -44,7 +44,7 @@
             <Field
               v-model="dataRegister.email"
               name="email"
-              class="px-3 py-3 text-white"
+              class="border px-3 py-3 text-white"
               placeholder="Email *"
               type="email"
               autocomplete="off"
@@ -55,7 +55,7 @@
           <div class="field-wrap">
             <Field
               v-model="dataRegister.password"
-              class="px-3 py-3 text-white"
+              class="border px-3 py-3 text-white"
               name="password"
               type="password"
               placeholder="Password *"
@@ -85,7 +85,7 @@
             <Field
               v-model="dataLogin.email"
               placeholder="Email *"
-              class="p-3 text-white"
+              class="p-3 text-white border"
               type="email"
               name="email"
               autocomplete="off"
@@ -97,7 +97,7 @@
             <Field
               v-model="dataLogin.password"
               placeholder="Password *"
-              class="p-3 text-white"
+              class="p-3 text-white border"
               type="password"
               name="password"
               autocomplete="off"
@@ -216,15 +216,18 @@ export default {
 
           this.loading = false;
           const accessToken = response.data.accessToken;
+          console.log(accessToken);
           localStorage.setItem("access_token", accessToken);
           // //decode lay thong tin payload
           var decodedPayload = jwt_decode(accessToken);
           console.log(decodedPayload);
           this.$store.dispatch("auth/handleSetUser", decodedPayload);
           if (decodedPayload.role === "admin") {
-            this.$router.push({ name: "/admin/dashboard" });
+            window.location.href = "/admin/dashboard";
+            // this.$router.push({ name: "/admin/dashboard" });
           } else {
-            this.$router.push({ name: "home" });
+            // this.$router.push({ name: "home" });
+            window.location.href = "/home";
           }
         }
       } catch (e) {

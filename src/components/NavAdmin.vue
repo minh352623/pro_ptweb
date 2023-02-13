@@ -18,7 +18,14 @@
       </ul>
 
       <!-- Right navbar links -->
-      <ul class="navbar-nav ml-auto">
+      <ul class="navbar-nav ml-auto flex items-center">
+        <li class="nav-item">
+          <span
+            @click="logout"
+            class="px-3 cursor-pointer hover:scale-110 transition-all rounded-lg py-2 bg-slate-500 text-white font-bold"
+            >Đăng xuất</span
+          >
+        </li>
         <!-- Navbar Search -->
         <li class="nav-item">
           <a
@@ -188,3 +195,13 @@
     </nav>
   </div>
 </template>
+<script>
+export default {
+  methods: {
+    logout() {
+      localStorage.removeItem("access_token");
+      this.$router.push({ name: "login" });
+    },
+  },
+};
+</script>

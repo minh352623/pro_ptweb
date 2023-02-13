@@ -18,13 +18,15 @@
         <div class="user-panel mt-3 pb-3 mb-3 d-flex">
           <div class="image">
             <img
-              src="../assets/admin/dist/img/user2-160x160.jpg"
+              :src="IMAGE_SERVER + user.avatar"
               class="img-circle elevation-2"
               alt="User Image"
             />
           </div>
           <div class="info">
-            <a href="#" class="d-block">Alexander Pierce</a>
+            <a href="#" class="d-block">{{
+              user.firstName + " " + user.lastName
+            }}</a>
           </div>
         </div>
 
@@ -55,7 +57,7 @@
           >
             <!-- Add icons to the links using the .nav-icon class
                with font-awesome or any other icon font library -->
-            <li class="nav-item menu-open">
+            <li class="nav-item">
               <router-link
                 :to="{
                   name: '/admin/dashboard',
@@ -81,9 +83,37 @@
               >
                 <i class="fas nav-icon fa-user-circle"></i>
                 <p>
-                  Accounts
+                  Tài khoản
                   <span class="right badge badge-danger">New</span>
                 </p>
+              </router-link>
+            </li>
+            <li class="nav-item">
+              <router-link
+                :to="{
+                  name: '/admin/province',
+                }"
+                class="nav-link"
+                :class="{
+                  active: '/admin/province' === routeCurrent.fullPath,
+                }"
+              >
+                <i class="fas fa-frog nav-icon"></i>
+                <p>Tỉnh thành</p>
+              </router-link>
+            </li>
+            <li class="nav-item">
+              <router-link
+                :to="{
+                  name: '/admin/hotel',
+                }"
+                class="nav-link"
+                :class="{
+                  active: '/admin/hotel' === routeCurrent.fullPath,
+                }"
+              >
+                <i class="fas fa-hotel nav-icon"></i>
+                <p>Khách sạn</p>
               </router-link>
             </li>
           </ul>
@@ -96,11 +126,20 @@
 </template>
 
 <script>
+import { IMAGE_SERVER } from "@/constants/index";
+
 export default {
   data() {
     return {
       routeCurrent: this.$route,
+      user: "",
+      IMAGE_SERVER,
     };
+  },
+  created() {
+    this.routeCurrent = this.$route.href;
+    console.log(this.$store.state.auth);
+    this.user = this.$store.state.auth.user;
   },
 };
 </script>

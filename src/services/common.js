@@ -19,3 +19,47 @@ axios.interceptors.request.use(
     return Promise.reject(error);
   }
 );
+
+axios.interceptors.response.use(
+  function (response) {
+    console.log("vao day r hhehe");
+
+    return response.data;
+  },
+  async function (error) {
+    const config = error.config;
+    const response = error?.response;
+
+    if (response.status === 401) {
+      console.log("vao day r");
+      alert("het han dang nhap");
+      return Promise.reject(error);
+    }
+    if (response.status === 403) {
+      console.log("vao day admin r");
+      return Promise.reject(error);
+    }
+    // if (
+    //   response.status === 401 &&
+    //   response.data.errors &&
+    //   response.data.errors.message === "jwt expired"
+    // ) {
+    //   const res = await authApi.refreshToken();
+
+    //   if (res.elements) {
+    //     /**
+    //      * * Sau khi gọi refresh token thì chúng ta sẽ có accessToken mới
+    //      * * và set vào localStorage sau đó set lại headers cho axios
+    //      */
+    //     localStorage.setItem("accessToken", res.elements.accessToken);
+
+    //     instance.defaults.headers.common["Authorization"] =
+    //       "Bearer " + res.elements.accessToken;
+
+    //     return instance(config);
+    //   }
+    // }
+
+    return Promise.reject(error);
+  }
+);
