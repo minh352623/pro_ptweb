@@ -17,9 +17,9 @@ export default {
     const store = useStore();
     function fetchCurrentUser() {
       let accessToken = localStorage.getItem("access_token") || null;
-      if (!accessToken && location.pathname != "/login") {
-        return (window.location.href = "/login");
-      }
+      // if (!accessToken && location.pathname != "/login") {
+      //   return (window.location.href = "/login");
+      // }
       if (accessToken) {
         var decodedPayload = jwt_decode(accessToken) || null;
         console.log(decodedPayload);

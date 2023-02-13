@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h2 class="text-center w-full uppercase">Danh sách tài khoản</h2>
+    <h2 class="text-center w-full uppercase">Danh sách khách sạn</h2>
     <div class="flex justify-between px-4 items-center">
       <div class="flex-1">
         <form action="" class="w-full">
@@ -9,15 +9,15 @@
             <input
               v-model="keyword"
               type="text"
-              placeholder="abc@gmail.com..."
+              placeholder="abc..."
               class="form-control py-2"
             />
           </div>
         </form>
       </div>
       <button-create
-        nameButton="Tạo tài khoản"
-        link="/account/create"
+        nameButton="Tạo  khách sạn"
+        link="/hotel/create"
       ></button-create>
     </div>
     <div class="card-body">
@@ -25,47 +25,51 @@
         <thead>
           <tr>
             <th style="width: 10px">#</th>
-            <th>Fullname</th>
-            <th>Avatar</th>
+            <th class="w-[10%]">Tên</th>
+            <th>Địa chỉ</th>
 
-            <th>Email</th>
-            <th>Address</th>
-            <th>Tel</th>
-
-            <th>Role</th>
+            <th>Giá</th>
+            <th>Danh sách ảnh</th>
             <th class="text-center">Action</th>
           </tr>
         </thead>
-        <tbody v-if="data?.accounts?.length > 0">
-          <tr v-for="account in data.accounts" :key="account._id">
-            <td>{{ account._id }}</td>
-            <td>{{ account.firstName + " " + account.lastName }}</td>
+        <tbody v-if="data?.hotels?.length > 0">
+          <tr v-for="hotel in data.hotels" :key="hotel._id">
+            <td>{{ hotel._id }}</td>
+            <td>{{ hotel.name }}</td>
             <td>
               <span>
-                <img
-                  class="w-[100px] h-[100px] object-cover"
-                  :src="IMAGE_SERVER + account?.avatar"
-                  alt=""
-                />
+                {{ hotel.address }}
               </span>
             </td>
-            <td>{{ account.email }}</td>
-            <td>{{ account.address }}</td>
-            <td>{{ account.tel }}</td>
-
-            <td>{{ account.role }}</td>
-            <td v-if="user._id != account._id">
+            <td>{{ hotel.price }}</td>
+            <td>
+              <div class="grid grid-cols-3 gap-2">
+                <span
+                  v-for="image in hotel.images"
+                  :key="image"
+                  class="w-[120px] h-[80px]"
+                >
+                  <img
+                    class="w-full h-full object-cover"
+                    :src="IMAGE_SERVER + image?.filename"
+                    alt=""
+                  />
+                </span>
+              </div>
+            </td>
+            <td>
               <div class="flex gap-3 justify-center">
                 <router-link
                   :to="{
-                    name: '/account/edit',
-                    params: { id: account._id },
+                    name: '/hotel/edit',
+                    params: { id: hotel._id },
                   }"
                   class="py-2 cursor-pointer hover:scale-110 transition-all px-3 rounded-lg bg-yellow-500 text-white"
                   >Sửa</router-link
                 >
                 <span
-                  @click="deleteAccount(account._id)"
+                  @click="deleteHotel(hotel._id)"
                   class="py-2 cursor-pointer hover:scale-110 transition-all px-3 rounded-lg bg-red-500 text-white"
                   >Xóa</span
                 >
@@ -86,13 +90,14 @@
 
 <script>
 import { reactive, ref } from "@vue/reactivity";
-import UserService from "@/services/user.service";
+import HotelService from "@/services/hotel.service";
 import { useRoute, useRouter } from "vue-router";
 import { computed, watch } from "@vue/runtime-core";
 import ButtonCreate from "@/components/ButtonCreate.vue";
 import { IMAGE_SERVER } from "@/constants/index";
 import { useStore } from "vuex";
 import Swal from "sweetalert2";
+
 export default {
   components: {
     ButtonCreate,
@@ -104,9 +109,9 @@ export default {
     const page = ref(1);
     const keyword = ref("");
     const router = useRouter();
-    const fetchAccouts = async (page, keyword) => {
+    const fetchHotels = async (page, keyword) => {
       try {
-        const response = await UserService.getPagination(page, keyword);
+        const response = await HotelService.getPagination(page, keyword);
         console.log(response);
         if (response.status === 200) {
           data.value = response.data;
@@ -123,19 +128,19 @@ export default {
       }
     };
     watch(page, (numberNew, numberOld) => {
-      fetchAccouts(numberNew, keyword.value);
+      fetchHotels(numberNew, keyword.value);
     });
     watch(keyword, (keywordNew, keywordOld) => {
       console.log(keywordNew);
-      fetchAccouts(page.value, keywordNew);
+      fetchHotels(page.value, keywordNew);
     });
     const clickCallback = () => {};
-    fetchAccouts(1, "");
+    fetchHotels(1, "");
 
-    const deleteAccount = async (id) => {
+    const deleteHotel = async (id) => {
       Swal.fire({
         title: "Bạn chắc chắn chứ?",
-        text: "Tài khoản sẽ bị xóa ngay bây giờ!",
+        text: "Khách sạn sẽ bị xóa ngay bây giờ!",
         icon: "warning",
         showCancelButton: true,
         confirmButtonColor: "#3085d6",
@@ -144,11 +149,11 @@ export default {
       }).then(async (result) => {
         if (result.isConfirmed) {
           try {
-            const response = await UserService.deleteAccount(id);
+            const response = await HotelService.deleteHotel(id);
             if (response.status === 200) {
-              fetchAccouts(1, "");
+              fetchHotels(1, "");
 
-              Swal.fire("Deleted!", "Xóa tài khoản thành công!", "success");
+              Swal.fire("Deleted!", "Xóa khách sạn thành công!", "success");
             }
           } catch (e) {
             console.log(e);
@@ -161,7 +166,7 @@ export default {
       page,
       user,
       keyword,
-      deleteAccount,
+      deleteHotel,
       IMAGE_SERVER,
       clickCallback,
     };

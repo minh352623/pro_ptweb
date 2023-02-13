@@ -1,10 +1,19 @@
 <template>
-  <div>
-    <h1>default</h1>
+  <div class="bg-white">
+    <header-client></header-client>
     <slot></slot>
+    <footer-client></footer-client>
   </div>
 </template>
 
 <script>
-export default {};
+import HeaderClient from "../components/HeaderClient.vue";
+import FooterClient from "../components/FooterClient.vue";
+
+export default {
+  components: {
+    HeaderClient: HeaderClient,
+    FooterClient: FooterClient,
+  },
+};
 </script>

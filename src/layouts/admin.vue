@@ -87,12 +87,24 @@ import "../assets/admin/dist/js/pages/dashboard2.js";
 import NavAdmin from "@/components/NavAdmin.vue";
 import SidebarAdmin from "@/components/SidebarAdmin.vue";
 import FooterAdmin from "@/components/FooterAdmin.vue";
+import Swal from "sweetalert2";
 
 export default {
   components: {
     NavAdmin: NavAdmin,
     SidebarAdmin: SidebarAdmin,
     FooterAdmin: FooterAdmin,
+  },
+  created() {
+    if (this.$store.state.auth.user.role != "admin") {
+      Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        text: "Bạn không có quyền truy cập!",
+        footer: '<a href="">Why do I have this issue?</a>',
+      });
+      this.$router.push({ name: "login" });
+    }
   },
 };
 </script>
